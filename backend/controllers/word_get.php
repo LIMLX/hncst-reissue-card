@@ -25,9 +25,9 @@ if ($employeeInfo === '') {
 }
 $id = isset($_POST['id']) ? trim($_POST['id']) : '';
 
-//if (empty($id)) {
-//    echo "参数错误";
-//    die();
-//}
+if (empty($id)) {
+    echo "参数错误";
+    die();
+}
 $wordDAO = new WordDAO();
 echo $wordDAO->getCardOne(1);

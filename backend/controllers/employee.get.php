@@ -1,4 +1,6 @@
 <?php
+require "../models/EmployeeDAO.php";
+
 if (!session_id()) {
     session_start();
 }
@@ -13,8 +15,23 @@ if (!isset($_SESSION['verify_me']['info']['yb_employid']) || empty($_SESSION['ve
     echo "身份权限错误";
     die();
 }
-$employeeInfo = isset($_SESSION['verify_me']['info']) ? trim($_SESSION['verify_me']['info']) : '';
+$employeeInfo = '';
+if (isset($_SESSION['verify_me']['info']) && !empty($_SESSION['verify_me']['info'])) {
+    $employeeInfo =$_SESSION['verify_me']['info'];
+}
 if ($employeeInfo === '') {
     echo "身份验证错误";
     die();
 }
+$id = isset($_GET['id']) ? trim($_GET['id']) : '';
+if (!ctype_digit($id)) {
+    echo "参数传递错误";
+    die();
+}
+$employeeDAO = new EmployeeDAO();
+$cardData =  $employeeDAO->findCardOne($id);
+if ($cardData) {
+    echo json_encode($cardData);
+    die();
+}
+echo "异常";
